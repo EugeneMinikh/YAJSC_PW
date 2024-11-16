@@ -27,7 +27,6 @@ test("perform login", async ({ page }) => {
 
 test("Add product to the cart", async ({ page }) => {
   const elements = new PageElements(page);
-  const productSelection = await elements.getProductSelection();
   const addToCartButton = await elements.getAddToCartButton();
   const productNameInCart = await elements.getProductNameInCart();
   const cartCountLocator = await elements.getCartCount();
