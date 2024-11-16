@@ -1,11 +1,10 @@
 import { expect, test } from "@playwright/test";
 import { constants } from "../constants";
-import { beforeEach } from "node:test";
+import PageElements from "../pages/page_elements";
+
 require("dotenv").config({
   path: "/Users/eugene_minikh/Work_project/Yajsc_PW/YAJSC_PW/.env",
 });
-
-console.log(constants.baseUrl);
 
 test.beforeEach(async ({ page }) => {
   await page.goto(constants.baseUrl);
@@ -15,33 +14,36 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("perform login", async ({ page }) => {
-  const productsButton = page.getByText("Products");
-  const shopCard = page.locator("#shopping_cart_container");
-  const listLocator = page.locator(".inventory_list");
+  const elements = new PageElements(page);
+  const productsButton = await elements.getProductsButton();
+  const shopCard = await elements.getShopCard();
+  const listLocator = await elements.getListLocator();
   const itemCount = await listLocator.count();
 
   await expect(productsButton).toBeVisible();
   await expect(shopCard).toBeVisible();
-
   expect(itemCount).toBeGreaterThan(0);
 });
 
 test("Add product to the cart", async ({ page }) => {
-  const productSelection = page.locator('//*[@id="item_4_title_link"]');
-  const addToCartButton = page.locator(
-    '//*[@id="add-to-cart-sauce-labs-backpack"]'
-  );
+  const elements = new PageElements(page);
+  const productSelection = await elements.getProductSelection();
+  const addToCartButton = await elements.getAddToCartButton();
+  const productNameInCart = await elements.getProductNameInCart();
+  const cartCountLocator = await elements.getCartCount();
+  const productName = await elements.getProductName();
+  const removeButton = await elements.getRemoveButton();
 
   await addToCartButton.click();
 
-  const cartCount = await page.locator(".shopping_cart_badge").innerText();
-  expect(cartCount).toBe("1");
+  const cartCount = await cartCountLocator.innerText();
+  expect(cartCount).toContain("1");
 
   await page.click(".shopping_cart_link");
-
-  const productNameInCart = await page
-    .locator("#item_4_title_link")
-    .innerText();
-  const productName = await productSelection.innerText();
   expect(productNameInCart).toBe(productName);
+
+  await removeButton.click();
+
+  const updatedCartCount = await cartCountLocator.innerText();
+  expect(updatedCartCount).toBe("");
 });
