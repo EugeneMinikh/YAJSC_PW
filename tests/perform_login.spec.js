@@ -2,12 +2,12 @@ import { expect, test } from "@playwright/test";
 import { constants } from "../constants";
 import PageElements from "../pages/page_elements";
 
-require("dotenv").config({
-  path: "/Users/eugene_minikh/Work_project/Yajsc_PW/YAJSC_PW/.env",
-});
+// require("dotenv").config({
+//   path: "/Users/eugene_minikh/Work_project/Yajsc_PW/YAJSC_PW/.env",
+// });
 
 test.beforeEach(async ({ page }) => {
-  await page.goto(constants.baseUrl);
+  await page.goto("/");
   await page.fill("#user-name", constants.validUsername);
   await page.fill("#password", constants.validPassword);
   await page.click("#login-button");
@@ -27,6 +27,7 @@ test("perform login", async ({ page }) => {
 
 test("Add product to the cart", async ({ page }) => {
   const elements = new PageElements(page);
+
   const addToCartButton = await elements.getAddToCartButton();
   const productNameInCart = await elements.getProductNameInCart();
   const cartCountLocator = await elements.getCartCount();
