@@ -3,7 +3,7 @@ class PageElements {
     this.page = page;
   }
 
-  async getProductsButton() {
+  getProductsButton() {
     return this.page.getByText("Products");
   }
 
