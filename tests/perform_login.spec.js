@@ -22,7 +22,7 @@ test("perform login", async ({ page }) => {
 
   await expect(productsButton).toBeVisible();
   await expect(shopCard).toBeVisible();
-  expect(itemCount).toBeGreaterThan(0);
+  await expect(elements.getListLocator()).not.toHaveCount(0);
 });
 
 test("Add product to the cart", async ({ page }) => {
